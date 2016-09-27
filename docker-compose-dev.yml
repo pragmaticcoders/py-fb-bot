@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+  dev-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./src:/app/src
+      - pip-cache:/root/.cache
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    stdin_open: true
+    command: bash -c "pip install -r requirements.txt &&
+             pip install -r requirements-dev.txt &&
+             arun src/app/__init__.py create"
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./src:/app/src
+      - pip-cache:/root/.cache
+    stdin_open: true
+    command: bash -c "pip install -r requirements.txt &&
+             pip install -r requirements-dev.txt &&
+             ptw src"
+
+
+volumes:
+  pip-cache:
+    driver: local
