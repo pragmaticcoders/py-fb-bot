@@ -39,7 +39,7 @@ async def test_facebook_verification(cli, app):
 
 
 async def test_facebook_message_hook(cli, app, get_json_resurce):
-    token = app['config'].facebook_access_token
+    token = 'facebook_access_token'
     _, data = get_json_resurce('fb_message.json')
 
     sended_messages = []
@@ -55,7 +55,7 @@ async def test_facebook_message_hook(cli, app, get_json_resurce):
             data=data
         )
     assert resp.status == 200
-    assert used_tokens == {token, }
+    assert used_tokens == {token}
     assert set(toolz.map(
         lambda m: (toolz.get_in(['recipient', 'id'], m),
                    toolz.get_in(['message', 'text'], m)),

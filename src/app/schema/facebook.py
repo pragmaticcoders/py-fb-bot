@@ -10,7 +10,7 @@ fb_message = Schema(
         "entry": [
             {
                 "id": str,
-                "time": 1474880896215,
+                "time": int,
                 "messaging": [
                     {
                         "sender": {

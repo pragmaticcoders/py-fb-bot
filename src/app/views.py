@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from aiohttp import web
 from aiohttp.web import Response
 from schema import SchemaError
 
 from .facebook import is_valid_subscribe, echo
 from .schema.facebook import fb_message
+
+logger = logging.getLogger(__name__)
 
 
 class Index(web.View):
@@ -45,5 +49,6 @@ class Facebook(web.View):
             response.set_status(200)
             await echo(data, token, client_session, loop)
         except SchemaError as error:
+            logger.exception(error)
             response.set_status(400)
         return response
