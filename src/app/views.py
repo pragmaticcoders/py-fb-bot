@@ -43,12 +43,10 @@ class Facebook(web.View):
         token = self.facebook_access_token
         loop = self.request.app.loop
 
-        response = web.Response()
         try:
             data = fb_message.validate(text)
-            response.set_status(200)
             await echo(data, token, client_session, loop)
         except SchemaError as error:
             logger.exception(error)
-            response.set_status(400)
-        return response
+
+        return web.Response()
