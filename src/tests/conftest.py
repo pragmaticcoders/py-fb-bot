@@ -2,7 +2,7 @@
 
 import os
 import sys
-
+import json
 
 import pytest
 from aiohttp import web
@@ -22,3 +22,17 @@ def app(loop):
 @pytest.fixture()
 def cli(test_client, app, loop):
     return loop.run_until_complete(test_client(app))
+
+
+@pytest.fixture()
+def get_resurce_path():
+    return lambda p: os.path.join(TESTS_ROOT, 'resurces', p)
+
+
+@pytest.fixture()
+def get_json_resurce(get_resurce_path):
+    def getter(path):
+        with open(get_resurce_path(path)) as fp:
+            data = fp.read()
+            return json.loads(data), data
+    return getter
