@@ -47,9 +47,10 @@ async def test_facebook_message_hook(cli, app, get_json_resurce):
 
     sended_messages = []
     used_tokens = set()
-    async def mocked(message, token, *args):
+    async def mocked(template, token, client_session, context):
+        template(context)
         used_tokens.add(token)
-        sended_messages.append(message)
+        sended_messages.append(context)
 
     with mock.patch('app.facebook.api.call_messages_api', new=mocked):
         resp = await cli.post(
@@ -60,8 +61,8 @@ async def test_facebook_message_hook(cli, app, get_json_resurce):
     assert resp.status == 200
     assert used_tokens == {token}
     assert set(toolz.map(
-        lambda m: (toolz.get_in(['recipient', 'id'], m),
-                   toolz.get_in(['message', 'text'], m)),
+        lambda m: (toolz.get_in(['recipient_id'], m),
+                   toolz.get_in(['text'], m)),
         sended_messages
     )) == {('1225682400836903', 'hello'), ('1225682400836902', 'hello2')}
 

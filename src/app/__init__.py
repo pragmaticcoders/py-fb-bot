@@ -3,6 +3,7 @@
 from aiohttp import web, ClientSession
 
 from .routes import setup as setup_routers
+from .facebook.api import register_greeting
 
 
 CLIENT_SESSION_KEY = 'client_session'
@@ -12,6 +13,13 @@ async def on_startup(app):
     client_session = ClientSession(loop=app.loop)
     await client_session.__aenter__()
     app[CLIENT_SESSION_KEY] = client_session
+    config = app['config']
+    if not config.test:
+        await register_greeting(
+            config.facebook_page_id,
+            config.facebook_access_token,
+            client_session
+        )
 
 
 async def on_shutdown(app):
