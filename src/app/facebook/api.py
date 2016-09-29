@@ -30,9 +30,8 @@ async def call_api(url, template, token, client_session, context={}):
         'params': {'access_token': token}
     }
     async with client_session.post(url, **kwargs) as resp:
-        if resp.status_code != 200:
+        if resp.status != 200:
             logger.warning(await resp.text())
-
 
 async def call_thread_settings(template, page_id, token, client_session,
                                context={}):

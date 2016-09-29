@@ -34,11 +34,8 @@ def create(loop, conf=None):
         conf = Main
 
     app = web.Application(loop=loop)
-
     app.on_startup.append(on_startup)
     app.on_shutdown.append(on_shutdown)
-
-    app[CLIENT_SESSION_KEY] = ClientSession(loop=loop)
 
     conf.setup(app)
     setup_routers(app)

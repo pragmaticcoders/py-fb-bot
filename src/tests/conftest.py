@@ -16,7 +16,10 @@ sys.path.append(SRC_ROOT)
 @pytest.fixture()
 def app(loop):
     from app import create
-    return create(loop=loop)
+    from app.config import Test
+    _app = create(loop=loop, conf=Test)
+    loop.run_until_complete(_app.startup())
+    return _app
 
 
 @pytest.fixture()
