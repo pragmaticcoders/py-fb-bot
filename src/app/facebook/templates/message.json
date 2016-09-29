@@ -1,4 +1,4 @@
 {
-  "recipient": {"id": $recipient_id},
-  "message": {"text": $text}
+  "recipient": {"id": "$recipient_id"},
+  "message": {"text": "$text"}
 }
