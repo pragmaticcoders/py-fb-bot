@@ -6,7 +6,8 @@ from aiohttp import web
 from aiohttp.web import Response
 from schema import SchemaError
 
-from .facebook import is_valid_subscribe, echo
+from .facebook.api import is_valid_subscribe
+from .facebook.bot import  echo
 from .schema.facebook import fb_message
 
 logger = logging.getLogger(__name__)

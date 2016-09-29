@@ -48,7 +48,7 @@ async def test_facebook_message_hook(cli, app, get_json_resurce):
         used_tokens.add(token)
         sended_messages.append(message)
 
-    with mock.patch('app.facebook.call_messages_api', new=mocked):
+    with mock.patch('app.facebook.api.call_messages_api', new=mocked):
         resp = await cli.post(
             '/api/facebook/',
             headers={'Content-Type': 'application/json'},
