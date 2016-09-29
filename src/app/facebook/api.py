@@ -4,8 +4,13 @@ import logging
 
 import aiohttp
 
+from .utils import create_template
+
 
 logger = logging.getLogger(__name__)
+
+
+greeting_template = create_template('greeting')
 
 
 def is_valid_subscribe(data, token):

@@ -3,6 +3,9 @@ from unittest import mock
 import toolz
 
 
+from app.facebook.utils import create_template
+
+
 async def test_index(cli):
     resp = await cli.get('/')
     assert resp.status == 200
@@ -61,3 +64,24 @@ async def test_facebook_message_hook(cli, app, get_json_resurce):
                    toolz.get_in(['message', 'text'], m)),
         sended_messages
     )) == {('1225682400836903', 'hello'), ('1225682400836902', 'hello2')}
+
+
+def test_create_template():
+    template = create_template('greeting')
+    assert template.__name__ == 'greeting'
+    assert template() in """
+{
+  "setting_type":"greeting",
+  "greeting":{
+    "text":"Hi {{user_first_name}}, welcome to this Sample bot"
+  }
+}
+    """
+
+def test_create_template_loads():
+    template = create_template('greeting', loads=True)
+    assert template.__name__ == 'greeting'
+    assert template() == {
+        'greeting': {'text': 'Hi {{user_first_name}}, welcome to this Sample bot'},
+        'setting_type': 'greeting'
+    }
