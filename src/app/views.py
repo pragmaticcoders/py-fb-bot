@@ -48,6 +48,7 @@ class Facebook(web.View):
             data = fb_message.validate(text)
             await echo(data, token, client_session, loop)
         except SchemaError as error:
-            logger.exception(error)
+            logger.error("error: %s \n data: %s", error.code, text)
+
 
         return web.Response()
