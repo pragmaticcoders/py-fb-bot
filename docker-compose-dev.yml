@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  dev-app:
+  dev-bot-app:
     build:
       context: ./src/bot
       dockerfile: Dockerfile.dev
@@ -11,14 +11,17 @@ services:
       - ./src/bot/requirements.txt:/app/requirements.txt
       - ./src/bot/requirements-dev.txt:/app/requirements-dev.txt
       - pip-cache:/root/.cache
+    environment:
+      - FRONTEND_API_URL=bot:8000
+    links:
+      - "dev-backend-app:backend"
     ports:
-      - "8000:8000"
+      - "8001:8000"
     stdin_open: true
-    command: bash -c "pip install -r requirements.txt &&
-             pip install -r requirements-dev.txt &&
+    command: bash -c "pip install -r requirements.txt -r requirements-dev.txt &&
              gunicorn wsgi:app --bind 0.0.0.0:8000 --worker-class aiohttp.worker.GunicornWebWorker -w 1 --reload"
 
-  tests:
+  bot-tests:
     build:
       context: ./src/bot
       dockerfile: Dockerfile.dev
@@ -30,9 +33,33 @@ services:
       - ./src/bot/requirements-dev.txt:/app/requirements-dev.txt
       - pip-cache:/root/.cache
     stdin_open: true
-    command: bash -c "pip install -r requirements.txt &&
-             pip install -r requirements-dev.txt &&
+    command: bash -c "pip install -r requirements.txt -r requirements-dev.txt &&
              ptw ./ -- -s"
+
+
+  dev-backend-app:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./src/backend/backend_app:/app/backend_app
+      - ./src/backend/requirements.txt:/app/requirements.txt
+      - ./src/backend/requirements-dev.txt:/app/requirements-dev.txt
+      - pip-cache:/root/.cache
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres@db:5432/postgres
+    links:
+      - "dev-db:db"
+    stdin_open: true
+    command: bash -c "pip install -r requirements.txt -r requirements-dev.txt &&
+             python backend_app/manage.py runserver 0.0.0.0:8000 2>&1"
+
+  dev-db:
+      image: postgres:9.6
+      ports:
+        - "5432:5432"
 
 volumes:
   pip-cache:
