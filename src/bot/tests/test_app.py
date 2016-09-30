@@ -2,9 +2,10 @@
 import json
 from unittest import mock
 import toolz
+import toolz.curried as curried
 
 
-from app.facebook.utils import create_template
+from bot_app.facebook.utils import create_template
 
 
 async def test_index(cli):
@@ -52,7 +53,7 @@ async def test_facebook_message_hook(cli, app, get_json_resurce):
         used_tokens.add(token)
         sended_messages.append(json.loads(template(context)))
 
-    with mock.patch('app.facebook.api.call_messages_api', new=mocked):
+    with mock.patch('bot_app.facebook.api.call_messages_api', new=mocked):
         resp = await cli.post(
             '/api/facebook/',
             headers={'Content-Type': 'application/json'},
@@ -60,7 +61,7 @@ async def test_facebook_message_hook(cli, app, get_json_resurce):
         )
     assert resp.status == 200
     assert used_tokens == {token}
-    assert sended_messages == [
+    assert sorted(sended_messages, key=curried.get_in(['recipient', 'id'])) == [
         {'message': {'text': 'hello2'}, 'recipient': {'id': '1225682400836902'}},
         {'message': {'text': 'hello'}, 'recipient': {'id': '1225682400836903'}}
     ]

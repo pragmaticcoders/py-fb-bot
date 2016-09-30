@@ -3,35 +3,36 @@ version: '2'
 services:
   dev-app:
     build:
-      context: .
+      context: ./src/bot
       dockerfile: Dockerfile.dev
     volumes:
-      - ./src:/app/src
-      - ./requirements.txt:/app/requirements.txt
-      - ./requirements-dev.txt:/app/requirements-dev.txt
+      - ./src/bot/bot_app:/app/bot_app
+      - ./src/bot/wsgi.py:/app/wsgi.py
+      - ./src/bot/requirements.txt:/app/requirements.txt
+      - ./src/bot/requirements-dev.txt:/app/requirements-dev.txt
       - pip-cache:/root/.cache
     ports:
       - "8000:8000"
-      - "8001:8001"
     stdin_open: true
     command: bash -c "pip install -r requirements.txt &&
              pip install -r requirements-dev.txt &&
-             gunicorn src.runner:app --bind 0.0.0.0:8080 --worker-class aiohttp.worker.GunicornWebWorker -w 1 --reload"
+             gunicorn wsgi:app --bind 0.0.0.0:8000 --worker-class aiohttp.worker.GunicornWebWorker -w 1 --reload"
 
   tests:
     build:
-      context: .
+      context: ./src/bot
       dockerfile: Dockerfile.dev
     volumes:
-      - ./src:/app/src
-      - ./requirements.txt:/app/requirements.txt
-      - ./requirements-dev.txt:/app/requirements-dev.txt
+      - ./src/bot/bot_app:/app/bot_app
+      - ./src/bot/tests:/app/tests
+      - ./src/bot/wsgi.py:/app/wsgi.py
+      - ./src/bot/requirements.txt:/app/requirements.txt
+      - ./src/bot/requirements-dev.txt:/app/requirements-dev.txt
       - pip-cache:/root/.cache
     stdin_open: true
     command: bash -c "pip install -r requirements.txt &&
              pip install -r requirements-dev.txt &&
-             ptw src -- -s"
-
+             ptw ./ -- -s"
 
 volumes:
   pip-cache:

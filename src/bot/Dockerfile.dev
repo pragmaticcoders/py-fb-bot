@@ -3,13 +3,10 @@ FROM python:3.5.2
 MAINTAINER Mateusz Probachta <mateusz.probachta@pragmaticcoders.com>
 
 RUN mkdir -p /app
-ADD ./src /app/src
-ADD ./requirements-dev.txt /app
-ADD ./requirements.txt /app
+ADD . /app
 
 WORKDIR /app
 
 EXPOSE 8000
-EXPOSE 8001
 
 RUN pip install -U pip
