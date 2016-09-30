@@ -56,10 +56,32 @@ services:
     command: bash -c "pip install -r requirements.txt -r requirements-dev.txt &&
              python backend_app/manage.py runserver 0.0.0.0:8000 2>&1"
 
+  backend-tests:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./src/backend/backend_app:/app/backend_app
+      - ./src/backend/requirements.txt:/app/requirements.txt
+      - ./src/backend/requirements-dev.txt:/app/requirements-dev.txt
+      - pip-cache:/root/.cache
+    environment:
+      - DATABASE_URL=postgresql://postgres@db:5433/postgres
+    links:
+      - "dev-db:db"
+    stdin_open: true
+    command: bash -c "pip install -r requirements.txt -r requirements-dev.txt &&
+             ptw ./backend_app -- -s -rs"
+
   dev-db:
-      image: postgres:9.6
-      ports:
-        - "5432:5432"
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+
+  tests-db:
+    image: postgres:9.6
+    ports:
+      - "5433:5432"
 
 volumes:
   pip-cache:
