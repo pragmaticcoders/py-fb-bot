@@ -11,12 +11,13 @@ TESTS_ROOT = os.path.abspath(os.path.dirname(__file__))
 SRC_ROOT = os.path.dirname(TESTS_ROOT)
 
 sys.path.append(SRC_ROOT)
+print(sys.path)
 
 
 @pytest.fixture()
 def app(loop):
-    from app import create
-    from app.config import Test
+    from bot_app import create
+    from bot_app.config import Test
     _app = create(loop=loop, conf=Test)
     loop.run_until_complete(_app.startup())
     return _app

@@ -1,0 +1,11 @@
+Django==1.10.1
+dj-database-url==0.4.1
+psycopg2==2.6.2
+
+djangorestframework==3.4.7
+django-filter==0.15.2
+Markdown==2.6.7
+
+gunicorn==19.6.0
+
+toolz==0.8.0
