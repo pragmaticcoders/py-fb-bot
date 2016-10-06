@@ -4,6 +4,6 @@
 
 
 # Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+eb/staging/.elasticbeanstalk/*
+!./eb/staging/.elasticbeanstalk/*.cfg.yml
+!./eb/staging/.elasticbeanstalk/*.global.yml
