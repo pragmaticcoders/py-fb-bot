@@ -1,0 +1,35 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "volumes": [
+  ],
+  "containerDefinitions": [
+    {
+      "name": "fb-bot",
+      "image": "063507218586.dkr.ecr.eu-central-1.amazonaws.com/py-fb-bot/bot",
+      "environment": [],
+      "essential": true,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 8081,
+          "containerPort": 8080
+        }
+      ],
+      "mountPoints": []
+    },
+    {
+      "name": "backend",
+      "image": "063507218586.dkr.ecr.eu-central-1.amazonaws.com/py-fb-bot/backend",
+      "environment": [],
+      "essential": true,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 8080
+        }
+      ],
+      "mountPoints": []
+    }
+  ]
+}
