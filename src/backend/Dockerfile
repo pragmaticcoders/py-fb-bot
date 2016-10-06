@@ -12,4 +12,4 @@ EXPOSE 8080
 RUN pip install -U pip && \
     pip install -r requirements.txt
 
-CMD gunicorn wsgi:app --bind 0.0.0.0:8080 --worker-class aiohttp.worker.GunicornWebWorker
+CMD gunicorn --chdir backend_app backend_app.wsgi:application --bind 0.0.0.0:8080
