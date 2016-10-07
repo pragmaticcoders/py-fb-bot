@@ -12,6 +12,10 @@ RUN pip install -U pip && pip install -r requirements.txt
 
 ADD . /app
 
+RUN mkdir -p /var/www/api-static
+RUN python backend_app/manage.py collectstatic --noinput
+VOLUME /var/www/api-static
+
 CMD bash -c "\
   export DATABASE_URL=postgresql://$RDS_USERNAME:$RDS_PASSWORD@$RDS_HOSTNAME:$RDS_PORT/$RDS_DB_NAME && \
   python backend_app/manage.py migrate && \

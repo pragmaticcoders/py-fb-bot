@@ -13,7 +13,6 @@
         "sourcePath": "/var/app/current/html"
       }
     }
-
   ],
   "containerDefinitions": [
     {
@@ -30,6 +29,7 @@
       "links": [
           "fb-bot", "backend"
       ],
+      "volumesFrom": [{"sourceContainer": "backend"}],
       "mountPoints": [
         {
           "sourceVolume": "awseb-logs-nginx-proxy",
