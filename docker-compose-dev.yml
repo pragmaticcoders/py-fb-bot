@@ -56,6 +56,27 @@ services:
     command: bash -c "pip install -r requirements.txt -r requirements-dev.txt &&
              python backend_app/manage.py runserver 0.0.0.0:8000 2>&1"
 
+  dev-frontend-app:
+    build:
+      context: ./src/frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - node-modules:/app/node_modules
+      - ./src/frontend:/app
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+
+  frontend-tests:
+    build:
+      context: ./src/frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - node-modules:/app/node_modules
+      - ./src/frontend:/app
+    command: bash -c "npm run test:dev"
+
   backend-tests:
     build:
       context: ./src/backend
@@ -85,4 +106,6 @@ services:
 
 volumes:
   pip-cache:
+    driver: local
+  node-modules:
     driver: local

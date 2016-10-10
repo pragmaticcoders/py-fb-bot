@@ -2,6 +2,9 @@
 */__pycache__*
 *.pyc
 
+src/frontend/dist
+src/frontend/coverage
+src/frontend/cache
 
 # Elastic Beanstalk Files
 eb/staging/.elasticbeanstalk/*

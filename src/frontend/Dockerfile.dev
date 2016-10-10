@@ -1,0 +1,6 @@
+FROM node:6.0.0
+
+COPY . /app
+WORKDIR /app
+
+CMD npm install && npm start
