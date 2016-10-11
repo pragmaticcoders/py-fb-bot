@@ -11,3 +11,6 @@ function upload() {
 
 upload src/bot py-fb-bot/bot
 upload src/backend py-fb-bot/backend
+echo "Building frontend dist for production"
+docker-compose -f docker-compose-dev.yml run dev-frontend-app bash -c "NODE_ENV=production npm run compile"
+upload src/frontend py-fb-bot/frontend
