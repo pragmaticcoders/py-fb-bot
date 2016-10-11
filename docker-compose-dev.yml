@@ -1,6 +1,17 @@
 version: '2'
 
 services:
+  nginx:
+    image: nginx
+    links:
+      - "dev-backend-app:backend"
+      - "dev-frontend-app:frontend"
+      - "dev-bot-app:bot"
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src/dev-proxy/conf.d:/etc/nginx/conf.d
+
   dev-bot-app:
     build:
       context: ./src/bot
@@ -15,8 +26,6 @@ services:
       - FRONTEND_API_URL=bot:8000
     links:
       - "dev-backend-app:backend"
-    ports:
-      - "8001:8000"
     stdin_open: true
     command: bash -c "pip install -r requirements.txt -r requirements-dev.txt &&
              gunicorn wsgi:app --bind 0.0.0.0:8000 --worker-class aiohttp.worker.GunicornWebWorker -w 1 --reload"
@@ -46,8 +55,6 @@ services:
       - ./src/backend/requirements.txt:/app/requirements.txt
       - ./src/backend/requirements-dev.txt:/app/requirements-dev.txt
       - pip-cache:/root/.cache
-    ports:
-      - "8000:8000"
     environment:
       - DATABASE_URL=postgresql://postgres@db:5432/postgres
     links:
@@ -65,8 +72,6 @@ services:
       - ./src/frontend:/app
     environment:
       - NODE_ENV=development
-    ports:
-      - "3000:3000"
 
   frontend-tests:
     build:
