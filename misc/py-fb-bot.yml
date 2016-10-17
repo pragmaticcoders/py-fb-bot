@@ -1,0 +1,15 @@
+session_name: py-fb-bot
+# shell_command_before:
+start_directory: ..
+
+windows:
+  - window_name: bot-app
+    layout: even-horizontal
+    panes:
+      - docker-compose -f docker-compose-dev.yml up dev-bot-app
+      - docker-compose -f docker-compose-dev.yml up bot-tests
+  - window_name: backend-app
+    layout: even-horizontal
+    panes:
+      - docker-compose -f docker-compose-dev.yml up dev-backend-app
+      - docker-compose -f docker-compose-dev.yml up backend-tests
